@@ -6,303 +6,131 @@
 <title>FaultLens — 工业设备故障诊断Agent</title>
 <style>
 :root {
-  --bg: #0d1117;
-  --panel: #161b22;
-  --border: #21262d;
-  --text: #e6edf3;
-  --sub: #8b949e;
-  --accent: #00d4aa;
-  --accent2: #58a6ff;
-  --warn: #f0ad4e;
-  --danger: #f85149;
-  --safe: #3fb950;
-  --font: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  --bg: #0d1117; --panel: #161b22; --border: #21262d; --text: #e6edf3;
+  --sub: #8b949e; --accent: #00d4aa; --accent2: #58a6ff; --warn: #f0ad4e;
+  --danger: #f85149; --safe: #3fb950;
+  --font: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --mono: 'JetBrains Mono','Cascadia Code','Consolas',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:var(--bg);color:var(--text);font-family:var(--font);
-  height:100vh;display:flex;overflow:hidden;
-}
-
-/* Sidebar */
-.sidebar{
-  width:280px;background:var(--panel);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;flex-shrink:0;
-}
-.sidebar-header{
-  padding:20px;border-bottom:1px solid var(--border);
-}
-.sidebar-header .logo{
-  font-size:22px;font-weight:700;color:var(--accent);
-  display:flex;align-items:center;gap:8px;
-}
-.sidebar-header .logo .dot{
-  width:10px;height:10px;background:var(--accent);border-radius:50%;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%,100%{opacity:1}
-  50%{opacity:.3}
-}
-.sidebar-header .tagline{
-  font-size:12px;color:var(--sub);margin-top:6px;
-}
-.sidebar-section{
-  padding:16px 20px;border-bottom:1px solid var(--border);
-}
-.sidebar-section h3{
-  font-size:11px;text-transform:uppercase;color:var(--sub);
-  letter-spacing:1px;margin-bottom:10px;
-}
+body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh;display:flex;overflow:hidden}
+.sidebar{width:280px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-header{padding:20px;border-bottom:1px solid var(--border)}
+.sidebar-header .logo{font-size:22px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:8px}
+.sidebar-header .logo .dot{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sidebar-header .tagline{font-size:12px;color:var(--sub);margin-top:6px}
+.sidebar-section{padding:16px 20px;border-bottom:1px solid var(--border)}
+.sidebar-section h3{font-size:11px;text-transform:uppercase;color:var(--sub);letter-spacing:1px;margin-bottom:10px}
 .equip-list{list-style:none}
-.equip-list li{
-  padding:10px 12px;border-radius:8px;cursor:pointer;
-  font-size:14px;margin-bottom:2px;transition:.15s;
-  display:flex;align-items:center;gap:8px;
-  border:1px solid transparent;
-}
+.equip-list li{padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px;margin-bottom:2px;transition:.15s;display:flex;align-items:center;gap:8px;border:1px solid transparent}
 .equip-list li:hover{background:rgba(255,255,255,.04)}
-.equip-list li.active{
-  background:rgba(0,212,170,.08);border-color:rgba(0,212,170,.25);
-}
+.equip-list li.active{background:rgba(0,212,170,.08);border-color:rgba(0,212,170,.25)}
 .equip-list li .icon{font-size:18px}
 .equip-list li .name{flex:1}
-.equip-list li .badge{
-  font-size:10px;padding:2px 8px;border-radius:10px;
-  background:rgba(88,166,255,.15);color:var(--accent2);
-}
-.sidebar-footer{
-  margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--sub);
-}
-
-/* Main */
-.main{
-  flex:1;display:flex;flex-direction:column;min-width:0;
-}
-.header{
-  padding:14px 24px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--panel);
-}
+.equip-list li .badge{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(88,166,255,.15);color:var(--accent2)}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--sub)}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.header{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
 .header h2{font-size:16px;font-weight:600}
-.header .status{
-  display:flex;align-items:center;gap:8px;font-size:13px;color:var(--safe);
-}
+.header .status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--safe)}
 .header .status .live{width:8px;height:8px;background:var(--safe);border-radius:50%}
-
-/* Chat area */
-.chat-area{
-  flex:1;overflow-y:auto;padding:24px;
-  display:flex;flex-direction:column;gap:16px;
-}
+.chat-area{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
 .chat-area::-webkit-scrollbar{width:6px}
 .chat-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-.msg{
-  max-width:75%;animation:fadeIn .3s ease;
-}
+.msg{max-width:75%;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .msg.agent{align-self:flex-start}
 .msg.user{align-self:flex-end}
-.msg .bubble{
-  padding:14px 18px;border-radius:16px;font-size:14px;line-height:1.65;
-}
-.msg.agent .bubble{
-  background:var(--panel);border:1px solid var(--border);
-  border-bottom-left-radius:4px;
-}
-.msg.user .bubble{
-  background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.25);
-  border-bottom-right-radius:4px;
-}
-.msg .meta{
-  font-size:11px;color:var(--sub);margin-bottom:4px;padding:0 4px;
-}
+.msg .bubble{padding:14px 18px;border-radius:16px;font-size:14px;line-height:1.65}
+.msg.agent .bubble{background:var(--panel);border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg.user .bubble{background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.25);border-bottom-right-radius:4px}
+.msg .meta{font-size:11px;color:var(--sub);margin-bottom:4px;padding:0 4px}
 .msg.agent .meta{text-align:left}
 .msg.user .meta{text-align:right}
-
-.msg.thinking .bubble{
-  display:flex;gap:6px;padding:12px 18px;
-}
-.msg.thinking .bubble .dots span{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:var(--accent);animation:bounce 1.2s infinite;
-}
+.msg.thinking .bubble{display:flex;gap:6px;padding:12px 18px}
+.msg.thinking .bubble .dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);animation:bounce 1.2s infinite}
 .msg.thinking .bubble .dots span:nth-child(2){animation-delay:.2s}
 .msg.thinking .bubble .dots span:nth-child(3){animation-delay:.4s}
 @keyframes bounce{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
-
-/* Input area */
-.input-area{
-  padding:16px 24px;border-top:1px solid var(--border);
-  background:var(--panel);
-}
-.input-row{
-  display:flex;gap:12px;align-items:center;
-}
-.input-row input{
-  flex:1;padding:12px 16px;border-radius:12px;
-  background:var(--bg);border:1px solid var(--border);
-  color:var(--text);font-size:14px;font-family:var(--font);
-  outline:none;transition:.15s;
-}
+.input-area{padding:16px 24px;border-top:1px solid var(--border);background:var(--panel)}
+.input-row{display:flex;gap:12px;align-items:center}
+.input-row input{flex:1;padding:12px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:.15s}
 .input-row input:focus{border-color:var(--accent)}
-.input-row button{
-  padding:12px 24px;border-radius:12px;
-  background:var(--accent);color:#000;border:none;
-  font-size:14px;font-weight:600;cursor:pointer;transition:.15s;
-  white-space:nowrap;
-}
+.input-row button{padding:12px 24px;border-radius:12px;background:var(--accent);color:#000;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
 .input-row button:hover{opacity:.85}
 .input-row button:disabled{opacity:.4;cursor:not-allowed}
-.suggestions{
-  display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;
-}
-.suggestions button{
-  padding:6px 14px;border-radius:16px;font-size:12px;
-  background:var(--bg);border:1px solid var(--border);
-  color:var(--sub);cursor:pointer;transition:.15s;white-space:nowrap;
-}
+.suggestions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.suggestions button{padding:6px 14px;border-radius:16px;font-size:12px;background:var(--bg);border:1px solid var(--border);color:var(--sub);cursor:pointer;transition:.15s;white-space:nowrap}
 .suggestions button:hover{color:var(--accent);border-color:var(--accent)}
-
-/* Report Modal */
-.report-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  display:flex;align-items:center;justify-content:center;z-index:100;
-  animation:fadeIn .2s ease;
-}
-.report-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;width:680px;max-height:85vh;overflow-y:auto;
-  padding:32px;
-}
+.report-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;animation:fadeIn .2s ease}
+.report-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;width:680px;max-height:85vh;overflow-y:auto;padding:32px}
 .report-card h2{color:var(--accent);font-size:20px;margin-bottom:20px}
 .report-card .section{margin-bottom:20px}
-.report-card .section h3{
-  font-size:13px;color:var(--sub);text-transform:uppercase;
-  letter-spacing:1px;margin-bottom:8px;padding-bottom:6px;
-  border-bottom:1px solid var(--border);
-}
-.report-card .diag-box{
-  background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.2);
-  border-radius:10px;padding:16px;margin-bottom:16px;
-}
-.report-card .diag-box .head{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:10px;
-}
+.report-card .section h3{font-size:13px;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.report-card .diag-box{background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:16px;margin-bottom:16px}
+.report-card .diag-box .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .report-card .diag-box .head .label{font-weight:600;font-size:16px}
-.report-card .diag-box .head .confidence{
-  font-size:13px;padding:4px 12px;border-radius:12px;
-  background:rgba(63,185,80,.15);color:var(--safe);
-}
+.report-card .diag-box .head .confidence{font-size:13px;padding:4px 12px;border-radius:12px;background:rgba(63,185,80,.15);color:var(--safe)}
 .report-card .steps{margin:0;padding-left:20px}
-.report-card .steps li{
-  margin-bottom:10px;font-size:14px;line-height:1.6;color:var(--text);
-}
-.report-card .steps li .step-hint{color:var(--sub);font-size:12px}
-.report-card .parts-table{
-  width:100%;border-collapse:collapse;font-size:13px;
-}
-.report-card .parts-table th{
-  text-align:left;padding:8px 12px;color:var(--sub);
-  border-bottom:1px solid var(--border);font-weight:500;
-}
-.report-card .parts-table td{
-  padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);
-}
-.report-card .close-btn{
-  width:100%;padding:12px;border-radius:10px;
-  background:var(--accent);color:#000;border:none;
-  font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;
-}
+.report-card .steps li{margin-bottom:10px;font-size:14px;line-height:1.6;color:var(--text)}
+.report-card .parts-table{width:100%;border-collapse:collapse;font-size:13px}
+.report-card .parts-table th{text-align:left;padding:8px 12px;color:var(--sub);border-bottom:1px solid var(--border);font-weight:500}
+.report-card .parts-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.report-card .close-btn{width:100%;padding:12px;border-radius:10px;background:var(--accent);color:#000;border:none;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}
 .report-card .close-btn:hover{opacity:.85}
-
-/* Quick actions in chat */
-.quick-actions{
-  display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
-}
-.quick-actions button{
-  padding:8px 16px;border-radius:10px;font-size:13px;
-  background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.2);
-  color:var(--accent2);cursor:pointer;transition:.15s;
-}
+.quick-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.quick-actions button{padding:8px 16px;border-radius:10px;font-size:13px;background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.2);color:var(--accent2);cursor:pointer;transition:.15s}
 .quick-actions button:hover{background:rgba(88,166,255,.15)}
-
-/* Mobile */
-@media(max-width:768px){
-  .sidebar{display:none}
-  .msg{max-width:90%}
-}
+@media(max-width:768px){.sidebar{display:none}.msg{max-width:90%}}
 </style>
 </head>
 <body>
-
-<!-- Sidebar -->
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="logo"><span class="dot"></span>FaultLens</div>
     <div class="tagline">工业设备故障诊断 Agent</div>
   </div>
   <div class="sidebar-section">
-    <h3>📋 设备类型</h3>
+    <h3>设备类型</h3>
     <ul class="equip-list" id="equipList">
-      <li class="active" data-equip="cnc">
-        <span class="icon">⚙️</span><span class="name">数控加工中心</span>
-        <span class="badge">CNC</span>
-      </li>
-      <li data-equip="hydraulic">
-        <span class="icon">🔧</span><span class="name">液压机</span>
-      </li>
-      <li data-equip="robot">
-        <span class="icon">🦾</span><span class="name">工业机器人</span>
-      </li>
-      <li data-equip="conveyor">
-        <span class="icon">🏭</span><span class="name">传送带系统</span>
-      </li>
-      <li data-equip="injection">
-        <span class="icon">🔥</span><span class="name">注塑机</span>
-      </li>
+      <li class="active" data-equip="cnc"><span class="icon">⚙️</span><span class="name">数控加工中心</span><span class="badge">CNC</span></li>
+      <li data-equip="hydraulic"><span class="icon">🔧</span><span class="name">液压机</span></li>
+      <li data-equip="robot"><span class="icon">🦾</span><span class="name">工业机器人</span></li>
+      <li data-equip="conveyor"><span class="icon">🏭</span><span class="name">传送带系统</span></li>
+      <li data-equip="injection"><span class="icon">🔥</span><span class="name">注塑机</span></li>
     </ul>
   </div>
   <div class="sidebar-section">
-    <h3>⚡ 快速诊断</h3>
+    <h3>快速诊断</h3>
     <div style="font-size:13px;color:var(--sub)">
-      <p style="margin-bottom:8px">直接描述设备故障现象，Agent 将自动引导排查。</p>
+      <p style="margin-bottom:8px">描述设备故障现象，Agent 将自动追问、推理并生成诊断报告。</p>
       <p>例："主轴异响，转速上去就报警"</p>
     </div>
   </div>
   <div class="sidebar-footer">
-    OPC先锋创新挑战赛 · FaultLens Team<br>
-    SCNU Aberdeen Institute
+    OPC先锋创新挑战赛 · FaultLens Team<br>SCNU Aberdeen Institute
   </div>
 </aside>
 
-<!-- Main -->
 <main class="main">
   <div class="header">
-    <h2>🔍 诊断会话</h2>
-    <div class="status"><span class="live"></span>Agent 就绪 · 通义千问 + RAG</div>
+    <h2>诊断会话 — powered by 通义千问</h2>
+    <div class="status"><span class="live"></span>LLM Agent 就绪</div>
   </div>
-
   <div class="chat-area" id="chatArea">
-    <!-- Initial greeting -->
     <div class="msg agent">
       <div class="meta">FaultLens Agent</div>
       <div class="bubble">
-        👋 你好！我是工业设备故障诊断 Agent。<br><br>
+        👋 你好！我是工业设备故障诊断 Agent，由<b>通义千问</b>驱动。<br><br>
         请描述你遇到的设备故障现象，我会像老师傅一样逐步追问、缩小范围，最终给出诊断结论和维修方案。<br><br>
         💡 <b>提示：</b>左侧可选择设备类型，或直接输入故障现象开始诊断。
       </div>
     </div>
   </div>
-
   <div class="input-area">
     <div class="input-row">
-      <input type="text" id="userInput" placeholder="描述设备故障现象，例如：主轴转速4000以上振动异常，报警SP-9012..."
-        autocomplete="off">
+      <input type="text" id="userInput" placeholder="描述设备故障现象，例如：主轴转速4000以上振动异常，报警SP-9012..." autocomplete="off">
       <button id="sendBtn" onclick="sendMessage()">发送 ↵</button>
     </div>
     <div class="suggestions" id="suggestions">
@@ -315,429 +143,152 @@ body{
 </main>
 
 <script>
-// ==================== KNOWLEDGE BASE ====================
-const KB = {
-  cnc: {
-    name:'数控加工中心', icon:'⚙️',
-    scenarios: {
-      'spindle_bearing':{
-        keywords:['主轴','异响','振动','SP-9012','AL-27','轴承','转速','啸叫'],
-        followups:[
-          {q:'振动是<b>轴向</b>（上下方向）还是<b>径向</b>（左右方向）？', opts:['轴向振动','径向振动','分不清']},
-          {q:'主轴空载时（不切削）是否也有振动？', opts:['空载也有','只有切削时有','没注意']},
-          {q:'最近一次更换主轴润滑油是什么时候？', opts:['3个月内','3-6个月','超过半年','不清楚']},
-        ],
-        diagnosis:{
-          title:'主轴前轴承（角接触球轴承 7014C）磨损',
-          confidence:92,
-          cause:'长期高速重载运行导致轴承滚道表面疲劳剥落，滚珠与滚道间隙增大，高速旋转时产生轴向窜动。',
-          steps:[
-            '停机并锁定主轴，断开主电源，悬挂"禁止合闸"警示牌',
-            '拆卸主轴前端盖，使用千分表测量主轴径向跳动（允许值 ≤0.005mm，实测约 0.018mm）',
-            '使用拉马工具拆卸旧轴承（型号：7014C/P4），注意标记安装方向',
-            '清洁主轴箱体内部，检查相邻部件（前后轴承隔套、锁紧螺母）是否损伤',
-            '安装新轴承，使用感应加热器（120°C）热装，确保安装到位无歪斜',
-            '按扭力规范锁紧（锁紧力矩：85N·m），加注推荐润滑脂（Kluber NBU 15）',
-            '手动盘车确认转动顺畅后，低速试运行30分钟，监测振动值回落至正常范围',
-          ],
-          parts:[
-            {name:'角接触球轴承 7014C/P4', qty:'1套', brand:'NSK/FAG', note:'精度等级P4级以上'},
-            {name:'主轴润滑脂 Kluber NBU 15', qty:'1支(400g)', brand:'Kluber', note:''},
-            {name:'前端盖O型密封圈', qty:'1个', brand:'按原厂规格', note:'需确认设备序列号'},
-            {name:'锁紧垫圈', qty:'1个', brand:'按原厂规格', note:'建议一次性更换'},
-          ],
-          time:'4-6小时',
-          safety:['必须断电挂牌','轴承热装需佩戴隔热手套','试运行阶段人员不得站在主轴正面'],
-        }
-      },
-      'tool_holder':{
-        keywords:['刀柄','换刀','精度','粗糙度','振纹','加工','尺寸'],
-        followups:[
-          {q:'加工出来的工件表面是否有<b>规则振纹</b>还是<b>不规则划痕</b>？', opts:['规则振纹','不规则划痕','粗糙但不振']},
-          {q:'换刀后问题是否消失？', opts:['换刀后正常','换刀无效','没换过刀']},
-          {q:'最近是否发生过撞刀事故？', opts:['是','没有']},
-        ],
-        diagnosis:{
-          title:'BT40刀柄锥面配合精度失效（刀柄-主轴锥孔间隙超标）',
-          confidence:85,
-          cause:'频繁换刀导致刀柄锥面微量磨损积累，或近期轻微撞刀导致主轴锥孔变形，刀柄夹紧后存在微小间隙。',
-          steps:[
-            '使用BT40标准检验棒 + 千分表检测主轴锥孔跳动（近端 ≤0.003mm，远端300mm处 ≤0.008mm）',
-            '使用红丹涂色法检查刀柄与主轴锥孔接触面积（正常 ≥80%，实测约55%）',
-            '若锥孔损伤轻微：使用主轴锥孔研磨膏手工研磨修复',
-            '若锥孔损伤严重：需拆下主轴送修进行精密磨削，或更换主轴',
-            '更换全部在用的可疑刀柄（BT40-ER32），新刀柄需做动平衡（G2.5级）',
-            '修复完成后用标准检验棒复测精度，加工测试件验证表面质量',
-          ],
-          parts:[
-            {name:'BT40-ER32刀柄（动平衡G2.5）', qty:'3-5把', brand:'REGOfix/BIG', note:'替代旧刀柄'},
-            {name:'主轴锥孔研磨膏（细目）', qty:'1套', brand:'MOTOREX', note:'仅轻微损伤时使用'},
-            {name:'BT40标准检验棒', qty:'1支', brand:'BIG/HAIMER', note:'检测用，可借用'},
-          ],
-          time:'6-12小时（轻微）/ 3-5天（需拆主轴）',
-          safety:['研磨作业需佩戴护目镜','刀柄动平衡需在专用设备上操作'],
-        }
-      }
-    }
-  },
-  hydraulic:{
-    name:'液压机', icon:'🔧',
-    scenarios:{
-      'seal_leak':{
-        keywords:['压力','上不去','油温','泄漏','掉压','漏油','保压'],
-        followups:[
-          {q:'压力掉到多少后稳定？还是持续下降？', opts:['降到某个值后稳定','一直在降','波动不定']},
-          {q:'液压油液位是否低于最低刻度线？', opts:['低于最低线','在正常范围','没检查过']},
-          {q:'设备周围地面是否有油渍？', opts:['有明显油渍','轻微油渍','干净']},
-        ],
-        diagnosis:{
-          title:'主油缸活塞密封圈（U型聚氨酯密封）老化破损',
-          confidence:89,
-          cause:'密封圈使用超过8000小时（设计寿命5000-6000h），聚氨酯材料硬化失去弹性，高压下无法有效密封，导致内部窜油。',
-          steps:[
-            '确认系统完全泄压，关闭液压泵站电源，锁定泄压阀',
-            '拆卸油缸端盖螺栓（对角均匀松开，防止端盖偏斜卡死）',
-            '取出旧密封组件，记录密封件安装顺序和方向（拍照存档）',
-            '检查活塞杆表面是否有划痕或锈蚀，如有轻微划伤使用#1000砂纸打磨',
-            '清洗油缸内壁和密封沟槽，确保无金属碎屑残留',
-            '安装新密封件（U型密封唇口朝向压力侧），涂抹液压油润滑',
-            '回装端盖，按扭力规范对角均匀拧紧（扭矩：120N·m）',
-            '更换液压油滤芯，补充液压油至标准液位',
-            '低压试运行15分钟 → 逐步升压至额定压力 → 保压测试30分钟',
-          ],
-          parts:[
-            {name:'U型聚氨酯密封圈 UN 125×140×12', qty:'1套', brand:'NOK/CFW', note:'确认油缸型号后选型'},
-            {name:'防尘密封圈 DH 125×135', qty:'1个', brand:'NOK/CFW', note:'同步更换'},
-            {name:'液压油滤芯（回油）', qty:'1个', brand:'HYDAC/PALL', note:'精度10μm'},
-            {name:'抗磨液压油 HM46#', qty:'200L', brand:'Shell/Mobil', note:'根据油箱容量确定'},
-          ],
-          time:'8-10小时',
-          safety:['拆装前必须确认系统完全泄压','液压油温高时禁止作业','废油按环保要求回收'],
-        }
-      }
-    }
-  },
-  robot:{
-    name:'工业机器人', icon:'🦾',
-    scenarios:{
-      'joint_overload':{
-        keywords:['关节','过载','报警','负载','抖动','不到位','伺服','减速机'],
-        followups:[
-          {q:'哪个关节报警？（J1底部旋转 / J2大臂 / J3小臂 / J4-J6手腕）', opts:['J1或J2大关节','J3-J6小关节','全部关节','不清楚']},
-          {q:'报警是在<b>启动瞬间</b>还是<b>运行途中</b>出现？', opts:['启动瞬间','运行途中','一直报警']},
-          {q:'最近是否更换过末端工具或调整过负载？', opts:['换过工具','调整过负载','都没变']},
-        ],
-        diagnosis:{
-          title:'J2关节RV减速机润滑油劣化导致过载',
-          confidence:87,
-          cause:'RV减速机内部润滑脂长期未更换（超过12000h），油脂氧化产生油泥，滚动阻力增大，电机电流持续偏高触发过载保护。',
-          steps:[
-            '记录当前各关节伺服电机电流值（用于更换后对比）',
-            '将机器人移至安全姿态（各关节垂直），断开伺服电源',
-            '拆卸J2关节减速机放油螺塞，排出旧油脂（观察是否有金属碎屑——有则需进一步拆检）',
-            '注入清洗油，手动缓慢转动关节清洗内部，排出清洗油',
-            '按RV减速机规格加注规定量的专用润滑脂（注意不要过量——过量同样导致发热）',
-            '更换减速机输入轴油封（同步更换，防止新油脂泄漏）',
-            '重新校准J2关节零点位置',
-            '低速空载运行30分钟 → 逐步加载 → 监测电机电流回落至正常范围',
-          ],
-          parts:[
-            {name:'RV减速机专用润滑脂', qty:'按减速机规格', brand:'纳博特斯克原厂', note:'严禁混用不同品牌油脂'},
-            {name:'减速机输入轴油封', qty:'1个', brand:'NOK', note:'按减速机型号匹配'},
-            {name:'放油螺塞密封垫', qty:'1个', brand:'按原厂规格', note:'一次性铜垫片'},
-          ],
-          time:'4-6小时',
-          safety:['操作机器人需有安全培训','排油时使用接油盘防止地面污染','更换后需进行安全回路测试'],
-        }
-      }
-    }
-  },
-  conveyor:{
-    name:'传送带系统', icon:'🏭',
-    scenarios:{
-      'belt_deviation':{
-        keywords:['跑偏','磨损','边缘','偏移','皮带','纠偏','撕裂','跑歪'],
-        followups:[
-          {q:'跑偏是<b>局部某个位置</b>还是<b>整条线都偏</b>？', opts:['局部位置','整条都偏','一端偏得厉害']},
-          {q:'跑偏是在<b>满载时</b>才出现，还是<b>空载时</b>也有？', opts:['满载时明显','空载也有','都差不多']},
-          {q:'上次调整纠偏托辊是什么时候？', opts:['3个月内','半年以上','从来没调过']},
-        ],
-        diagnosis:{
-          title:'驱动滚筒与从动滚筒轴线平行度超差（滚筒歪斜3.2mm）',
-          confidence:91,
-          cause:'从动滚筒张紧座长期受单侧拉力，地脚螺栓微动松动，导致滚筒轴线偏移。皮带在滚筒处受力不均产生横向分力，推动皮带向一侧跑偏。',
-          steps:[
-            '停机挂牌，测量两滚筒中心距及对角线距离，确认偏差量',
-            '在驱动滚筒和从动滚筒表面做标记线，使用激光对中仪测量轴线平行度',
-            '松开从动滚筒张紧座地脚螺栓',
-            '使用张紧螺杆微调滚筒位置，边调边用激光仪监测，直至轴线平行度 ≤0.5mm',
-            '重新锁紧地脚螺栓（扭矩180N·m），加装防松垫圈',
-            '检查所有纠偏托辊角度（正常前倾角2°-3°），逐一校准',
-            '空载试运行30分钟 → 半载运行1小时 → 满载运行，全程观察皮带运行轨迹',
-            '在皮带两侧加装防跑偏限位开关（预防性改造）',
-          ],
-          parts:[
-            {name:'从动滚筒轴承座（含调心滚子轴承）', qty:'2套', brand:'SKF/NSK', note:'如轴承已有异响应更换'},
-            {name:'地脚螺栓 M24×200（12.9级）', qty:'8套', brand:'按原厂规格', note:'含防松垫圈'},
-            {name:'纠偏托辊（锥形）', qty:'4个', brand:'按原厂规格', note:''},
-            {name:'防跑偏限位开关', qty:'2个', brand:'Omron/Schneider', note:'预防性加装'},
-          ],
-          time:'8-12小时',
-          safety:['调整前必须停机挂牌','皮带张紧力释放时注意防夹','满载测试时人员远离皮带运转区域'],
-        }
-      }
-    }
-  },
-  injection:{
-    name:'注塑机', icon:'🔥',
-    scenarios:{
-      'temp_control':{
-        keywords:['温度','加热','温控','超调','不稳定','热电偶','料筒','过热'],
-        followups:[
-          {q:'温度是<b>设定值附近剧烈波动</b>还是<b>持续偏高不回落</b>？', opts:['剧烈波动','持续偏高','有时正常有时异常']},
-          {q:'异常出现在哪个温区？（喷嘴/前段/中段/后段）', opts:['只有一个温区','多个温区同时','所有温区']},
-          {q:'最近是否更换过加热圈或热电偶？', opts:['换过','没换过','很久以前换过']},
-        ],
-        diagnosis:{
-          title:'中段料筒热电偶（K型）绝缘层老化导致信号漂移',
-          confidence:88,
-          cause:'热电偶长期在260°C高温环境下工作，MgO绝缘层吸潮后绝缘电阻下降（正常 ≥100MΩ，实测约2MΩ），引入干扰信号导致温控表读数波动，PID控制器输出紊乱。',
-          steps:[
-            '关闭加热电源，待料筒温度降至室温（强制风冷加速降温）',
-            '断开热电偶与温控表的接线端子',
-            '使用兆欧表（500V档）测量热电偶绝缘电阻：<5MΩ确认为失效',
-            '拆除旧热电偶，清理安装孔内的积碳和氧化物',
-            '安装新K型热电偶（弹簧压入式，确保测量端紧贴孔底）',
-            '接线注意冷端补偿导线极性（红=+，蓝=-），接反会导致读数反向漂移',
-            '检查对应固态继电器（SSR）是否因长期过热性能下降，必要时同步更换',
-            '逐步升温测试：100°C → 180°C → 260°C，每阶段稳定10分钟，确认温控正常',
-          ],
-          parts:[
-            {name:'K型铠装热电偶 Φ5×150mm', qty:'1支', brand:'Omega/上海自动化仪表', note:'确认插入深度'},
-            {name:'补偿导线 KX型 2×1.5mm²', qty:'5米', brand:'按原厂规格', note:'如需更换老化线缆'},
-            {name:'固态继电器 SSR-40DA', qty:'1个', brand:'Fotek/Crydom', note:'保险起见同步换'},
-            {name:'防爆接线盒密封圈', qty:'1个', brand:'按原厂规格', note:''},
-          ],
-          time:'3-4小时',
-          safety:['必须待料筒完全冷却后作业','热电偶接线极性必须正确','升温测试时注意料筒内残余料可能分解'],
-        }
-      }
-    }
+// --- API ---
+const API_URL = 'https://faultlens-api.pepper-panama.workers.dev';
+
+async function callAgent(messages) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, stream: false }),
+  });
+  if (!res.ok) throw new Error('API error: ' + res.status);
+  const data = await res.json();
+  return data.reply;
+}
+
+// --- Report parser ---
+function parseReport(text) {
+  const m = text.match(/---REPORT---\s*([\s\S]*?)\s*---END---/);
+  if (!m) return null;
+  try {
+    const report = JSON.parse(m[1]);
+    return { report, textBefore: text.slice(0, text.indexOf('---REPORT---')).trim() };
+  } catch(e) {
+    console.error('Report parse error:', e);
+    return null;
   }
-};
+}
 
-// ==================== STATE ====================
-let state = {
-  equip:'cnc',
-  scenario:null,
-  step:0,
-  followups:[],
-  answers:[],
-  waiting:false,
-};
-
-// ==================== HELPERS ====================
+// --- State ---
 const chatArea = document.getElementById('chatArea');
 const input = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
-const suggestionsDiv = document.getElementById('suggestions');
+let conversation = [];
+let waiting = false;
 
-function scrollBottom(){
-  chatArea.scrollTop = chatArea.scrollHeight;
+function scrollBottom() { chatArea.scrollTop = chatArea.scrollHeight; }
+
+function addMsg(role, html) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="meta">' + (role === 'agent' ? 'FaultLens Agent' : '你') + '</div><div class="bubble">' + html + '</div>';
+  chatArea.appendChild(div);
+  scrollBottom();
 }
 
-function addMsg(role, html, delay=0){
-  setTimeout(()=>{
-    const div = document.createElement('div');
-    div.className = `msg ${role}`;
-    div.innerHTML = `<div class="meta">${role==='agent'?'FaultLens Agent':'你'}</div><div class="bubble">${html}</div>`;
-    chatArea.appendChild(div);
-    scrollBottom();
-  }, delay);
-}
-
-function showThinking(duration){
+function showThinking() {
   const div = document.createElement('div');
   div.className = 'msg agent thinking';
   div.id = 'thinkingMsg';
-  div.innerHTML = `<div class="meta">FaultLens Agent</div><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div>`;
-  chatArea.appendChild(div);
-  scrollBottom();
-  return new Promise(r=>setTimeout(()=>{
-    const el = document.getElementById('thinkingMsg');
-    if(el) el.remove();
-    r();
-  }, duration));
-}
-
-function showQuickActions(options){
-  const div = document.createElement('div');
-  div.className = 'msg agent';
-  const btns = options.map((o,i)=>`<button onclick="pickOption(${i})">${o}</button>`).join('');
-  div.innerHTML = `<div class="meta">FaultLens Agent</div><div class="bubble"><div class="quick-actions">${btns}</div></div>`;
+  div.innerHTML = '<div class="meta">FaultLens Agent</div><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div>';
   chatArea.appendChild(div);
   scrollBottom();
 }
 
-function showReport(scenario){
-  const diag = scenario.diagnosis;
+function removeThinking() {
+  const el = document.getElementById('thinkingMsg');
+  if (el) el.remove();
+}
+
+function showReport(report) {
   let html = `
   <div class="report-overlay" onclick="if(event.target===this)this.remove()">
   <div class="report-card">
-    <h2>📋 诊断报告</h2>
-    <div class="section">
-      <h3>设备</h3>
-      <p>${KB[state.equip].icon} ${KB[state.equip].name}</p>
-    </div>
+    <h2>诊断报告</h2>
     <div class="diag-box">
       <div class="head">
-        <span class="label">🔍 ${diag.title}</span>
-        <span class="confidence">置信度 ${diag.confidence}%</span>
+        <span class="label">${report.title}</span>
+        <span class="confidence">置信度 ${report.confidence}%</span>
       </div>
-      <p style="color:var(--sub);font-size:14px;line-height:1.6">${diag.cause}</p>
+      <p style="color:var(--sub);font-size:14px;line-height:1.6">${report.cause}</p>
     </div>
+    <div class="section"><h3>维修步骤</h3><ol class="steps">${report.steps.map(s=>'<li>'+s+'</li>').join('')}</ol></div>
     <div class="section">
-      <h3>🛠️ 维修步骤</h3>
-      <ol class="steps">
-        ${diag.steps.map(s=>`<li>${s}</li>`).join('')}
-      </ol>
+      <h3>备件清单</h3>
+      <table class="parts-table"><tr><th>名称</th><th>数量</th><th>备注</th></tr>
+      ${report.parts.map(p=>'<tr><td>'+p.name+'</td><td>'+p.qty+'</td><td>'+(p.note||'')+'</td></tr>').join('')}</table>
     </div>
-    <div class="section">
-      <h3>📦 备件清单</h3>
-      <table class="parts-table">
-        <tr><th>名称</th><th>数量</th><th>推荐品牌</th><th>备注</th></tr>
-        ${diag.parts.map(p=>`<tr><td>${p.name}</td><td>${p.qty}</td><td>${p.brand}</td><td>${p.note}</td></tr>`).join('')}
-      </tr></table>
-    </div>
-    <div class="section" style="display:flex;gap:24px">
-      <div><h3>⏱️ 预计工时</h3><p style="font-size:16px">${diag.time}</p></div>
-      <div><h3>⚠️ 安全事项</h3><p style="font-size:13px;color:var(--warn)">${diag.safety.map(s=>'· '+s).join('<br>')}</p></div>
+    <div style="display:flex;gap:24px">
+      <div class="section" style="flex:1"><h3>预计工时</h3><p style="font-size:16px">${report.time||'待定'}</p></div>
+      <div class="section" style="flex:1"><h3>安全事项</h3><p style="font-size:13px;color:var(--warn)">${(report.safety||[]).map(s=>'· '+s).join('<br>')}</p></div>
     </div>
     <button class="close-btn" onclick="this.closest('.report-overlay').remove();startNew()">开始新的诊断</button>
   </div></div>`;
   document.body.insertAdjacentHTML('beforeend', html);
-  scrollBottom();
 }
 
-// ==================== CORE LOGIC ====================
-function findScenario(text){
-  const equipKB = KB[state.equip];
-  let best = null; let bestScore = 0;
-  for(const [key,sc] of Object.entries(equipKB.scenarios)){
-    let score = 0;
-    for(const kw of sc.keywords){
-      if(text.toLowerCase().includes(kw.toLowerCase())) score++;
-    }
-    if(score > bestScore){ bestScore = score; best = {key, sc}; }
-  }
-  return bestScore >= 1 ? best : null;
-}
-
-async function sendMessage(){
-  if(state.waiting) return;
+// --- Core ---
+async function sendMessage() {
+  if (waiting) return;
   const text = input.value.trim();
-  if(!text) return;
-  state.waiting = true;
+  if (!text) return;
+  waiting = true;
   sendBtn.disabled = true;
   input.value = '';
 
   addMsg('user', text);
+  conversation.push({ role: 'user', content: text });
+  showThinking();
 
-  if(state.step === 0){
-    // First message - find scenario
-    const match = findScenario(text);
-    if(match){
-      state.scenario = match.sc;
-      state.followups = match.sc.followups;
-      state.step = 1;
-      state.answers = [text];
+  try {
+    const reply = await callAgent(conversation);
+    removeThinking();
 
-      await showThinking(1500 + Math.random()*1000);
-      addMsg('agent', `根据你的描述，我初步判断可能是<b>${match.sc.diagnosis.title}</b>方向的问题。让我进一步确认：<br><br>${state.followups[0].q}`);
-      showQuickActions(state.followups[0].opts);
+    const parsed = parseReport(reply);
+    if (parsed) {
+      conversation.push({ role: 'assistant', content: reply });
+      if (parsed.textBefore) {
+        addMsg('agent', parsed.textBefore.replace(/\n/g, '<br>'));
+      }
+      showReport(parsed.report);
     } else {
-      await showThinking(1000);
-      const equipKB = KB[state.equip];
-      const allScenarios = Object.values(equipKB.scenarios).map(s=>s.keywords.join('、')).join('；');
-      addMsg('agent', `当前选择的设备类型是<b>${equipKB.name}</b>，我目前能诊断的故障包括：<br><br>· ${Object.values(equipKB.scenarios).map(s=>s.diagnosis.title).join('<br>· ')}<br><br>请更具体地描述故障现象，或切换左侧设备类型后再试。`);
+      conversation.push({ role: 'assistant', content: reply });
+      addMsg('agent', reply.replace(/\n/g, '<br>'));
     }
-  } else if(state.step <= state.followups.length){
-    // Follow-up answer
-    state.answers.push(text);
-    await showThinking(1200 + Math.random()*800);
-
-    if(state.step < state.followups.length){
-      // Next question
-      addMsg('agent', `明白了。${state.followups[state.step].q}`);
-      showQuickActions(state.followups[state.step].opts);
-      state.step++;
-    } else {
-      // Final diagnosis
-      addMsg('agent', '信息足够了，正在生成诊断报告...');
-      await showThinking(2000);
-      showReport(state.scenario);
-    }
+  } catch(e) {
+    removeThinking();
+    addMsg('agent', '抱歉，诊断服务暂时不可用，请稍后重试。<br><br><span style="color:var(--sub);font-size:12px">' + e.message + '</span>');
   }
 
-  state.waiting = false;
+  waiting = false;
   sendBtn.disabled = false;
 }
 
-function pickOption(i){
-  if(state.waiting) return;
-  const answer = state.followups[state.step-1].opts[i];
-  state.answers.push(answer);
-  addMsg('user', answer);
-  state.waiting = true;
-
-  setTimeout(async ()=>{
-    if(state.step < state.followups.length){
-      await showThinking(1000 + Math.random()*600);
-      addMsg('agent', `收到。${state.followups[state.step].q}`);
-      showQuickActions(state.followups[state.step].opts);
-      state.step++;
-      state.waiting = false;
-    } else {
-      await showThinking(1500);
-      addMsg('agent', '信息足够了，正在生成诊断报告...');
-      await showThinking(2000);
-      showReport(state.scenario);
-      state.waiting = false;
-    }
-  }, 300);
-}
-
-function quickSymptom(text){
+function quickSymptom(text) {
   input.value = text;
   sendMessage();
 }
 
-function startNew(){
-  state = {equip:state.equip, scenario:null, step:0, followups:[], answers:[], waiting:false};
+function startNew() {
+  conversation = [];
+  waiting = false;
   chatArea.innerHTML = '';
-  addMsg('agent', '开始新的诊断会话。请描述设备故障现象，或从下方快捷入口选择。');
-  suggestionsDiv.innerHTML = `
-    <button onclick="quickSymptom('主轴异响，转速上去就报AL-27')">主轴异响</button>
-    <button onclick="quickSymptom('液压机压力上不去，油温偏高')">压力异常</button>
-    <button onclick="quickSymptom('机械臂关节报警，负载超过额定值')">关节过载</button>
-    <button onclick="quickSymptom('传送带频繁跑偏，边缘磨损严重')">跑偏磨损</button>
-  `;
+  addMsg('agent', '开始新的诊断会话。请描述设备故障现象。');
   document.querySelector('.report-overlay')?.remove();
 }
 
 // Equipment switch
 document.getElementById('equipList').addEventListener('click', function(e){
   const li = e.target.closest('li');
-  if(!li) return;
+  if (!li) return;
   document.querySelectorAll('#equipList li').forEach(l=>l.classList.remove('active'));
   li.classList.add('active');
-  state.equip = li.dataset.equip;
   startNew();
 });
 
-// Enter to send
 input.addEventListener('keydown', function(e){
-  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 
 scrollBottom();
